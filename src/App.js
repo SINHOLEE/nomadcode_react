@@ -1,80 +1,49 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-// 재사용이 가능한 컴포넌트룰 만들 수 있다.
+// 클래스 리엑트 컴포넌트는 리턴을 가지고 있지 않는다. 왜? 펑션이 아니기 때문이다.
 
-function Bark(props){
-  return(
-  <div>
-    <h1>
-      bark
-    </h1>
-  </div>
-  ) 
-}
+// 어떻게 state를 관리할까?
+class App extends React.Component{
+  state = {
+    count: 0,
+  }
 
+  // 왜 setState를 사용해야할까? 그냥 this.state.count++ 해도 될것을... 그 이유는 밑에
+  // this.setState(new object) 는 리엑트 컴포넌트라는 클래스가 스테이트를 갱신 할 때 마다, 
+  // 랜더를 새로 해주면서 데이터를 동적으로 관리할 수 있게 한다.
+  // 바뀐 그 부분만 리 랜더링해준다. 전체가 아니라!!!와우 
+  add = () =>{
+    console.log("add");
+    // 여기서 this.state.count를 직접 호출하는것은 좋지 않다. 왜? 성능문제..
+    // this.setState({count: this.state.count + 1})
+    // 그럼 어떻게 해야하지?
+    // setState에서는 함수형으로 현재의 state를 화살표 함수로 사용할 수 있도록 제공한다.
+    // 여기서 의문. 보통 화살표 함수는 curr=>{count: curr.count + 1} 이렇게 사용할 텐데... 왜 양 끝에 ()가 있는거지?
+    this.setState(curr=>({count: curr.count + 1}));
+  }
+  minus = () =>{
+    console.log("minus");
+    this.setState(curr=>({count: curr.count - 1}));
+    
+  }
 
-const arr = [
-  { id: 1,
-    fav: 1,
-    imageUrl: "http1",
-  rating: 1,},
-  {id: 2,fav: 2,
-  imageUrl: "http2",rating: 4,},
-  {id: 3,fav: 3,
-  imageUrl: "http3", rating: 2,},
-  {id: 4,fav: 4,
-  imageUrl: "http4",rating: 3,},
-  {id: 5,fav: 5,
-  imageUrl: "http5", rating: 2.5,},
-]
-
-
-function MakeProps({fav, imageUrl, rating}){
-  return (
-    <div> 
-  <h1>fav: {fav}</h1>
-  <h1>imageUrl: {imageUrl}</h1>
-  <h1>rating: {rating} / 5.0</h1>
-</div>
-)
-}
-
-MakeProps.propTypes = {
-  fav: PropTypes.number.isRequired,
-  imageUrl: PropTypes.string.isRequired,
-  rating: PropTypes.number.isRequired,
-}
-
-// function renderFood({fav, imageUrl, id, rating}){
-//   return <MakeProps key={id} fav={fav} imageUrl={imageUrl}  rating={rating}></MakeProps>
-// }
-
-
-
-// 프롭스를 제대로 받았는지 체크하는 법 
-// npm install prop-types
-function App() {
-  return (
-    <div className="App">
-      <h1> 우와와와아아
+  render(){
+    return (
+    <div>
+      <h1>
+        the number is {this.state.count} in my state
       </h1>
-      <Bark />
-      <Bark />
-      <Bark />
-      {/* js 를 html에서 사용하는 것처럼 머스테치 문법으로 사용한다. 
-      
-      */}
-      {arr.map((obj )=>{
-        // 여기서 props로 들어가는것은 fav, imageUrl, key 이렇게 세개이다. 그 안에 들어간 obj.fav, obj.url 등은
-        // 현재 페이지에서 관리하고 있는 데이터에서 불러오는 값이다.
-        return <MakeProps key={obj.id} fav={obj.fav} imageUrl={obj.imageUrl} rating={obj.rating}></MakeProps>
-        })}
-
-      {/* 여기서 위의 펑션을 따로 빼보자. */}
-      {/* {arr.map(renderFood)} */}
+      <button onClick={this.add}>
+      Add
+      </button>
+      <button onClick={this.minus}>
+      Minus
+      </button>
     </div>
-  );
+    )
+  }
 }
+
 
 export default App;
