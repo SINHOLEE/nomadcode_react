@@ -1,68 +1,47 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# 리엑트
 
-## Available Scripts
 
-In the project directory, you can run:
 
-### `npm start`
+- 클래스 리엑트 컴포넌트는 리턴을 가지고 있지 않는다. 왜? 펑션이 아니기 때문이다.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
 
-### `npm test`
+### 1.  어떻게 state를 관리할까?
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- 왜 setState를 사용해야할까? 그냥 this.state.count++ 해도 될것을... 그 이유는 밑에 `this.setState(new object)` 는 리엑트 컴포넌트라는 클래스가 **스테이트를 갱신 할 때 마다, 랜더를 새로 해주면서 데이터를 동적으로 관리**할 수 있게 한다.
 
-### `npm run build`
+  즉! 바뀐 그 부분만 리 랜더링해준다. 전체가 아니라!!!와우 
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- this.state.count에 직접 접근해서 변경하지 마라.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+  ```javascript
+  add = () =>{
+  
+    console.log("add");
+  
+    this.setState({count: this.state.count + 1})
+  
+  }
+  ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+  여기서 this.state.count를 직접 호출하는것은 좋지 않다. 왜? 성능문제..  그럼 어떻게 해야하지? setState에서는 함수형으로 현재의 state를 화살표 함수로 사용할 수 있도록 제공한다.
 
-### `npm run eject`
+  여기서 의문. 보통 화살표 함수는 curr=>{count: curr.count + 1} 이렇게 사용할 텐데... 왜 양 끝에 ()가 있는거지?
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+  모범답안
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+  ```javascript
+  add = () =>{
+  
+    console.log("add");
+  
+      this.setState(curr=>({count: curr.count + 1}));
+  
+  
+  }
+  ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+  
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+# 2. Component Life cycle
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
